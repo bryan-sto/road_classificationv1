@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button[type="submit"] {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        h2 {
+            margin-top: 20px;
+        }
+        pre {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 3px;
+        }
+        video {
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        ul li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Klasifikasi Kerusakan Jalan</h1>
+    
+    <form method="post" action="{% url 'predict_images' %}">
+        {% csrf_token %}
+        <label for="street_name">Masukkan Nama Jalan:</label>
+        <br>
+        <input type="text" id="street_name" name="street_name" required>
+        <br>
+        <label for="image_folder">Path Folder Gambar:</label>
+        <br>
+        <input type="text" id="image_folder" name="image_folder" required>
+        <br>
+        <button type="submit">Predict</button>
+    </form>
+    
+    {% if json_output %}
+        <h2>Distribusi Hasil Klasifikasi:</h2>
+        <p><strong>Nama Jalan:</strong> {{ json_output.nama_jalan }}</p>
+        <p><strong>Presentase Hasil Prediksi:</strong></p>
+        <ul>
+            <li>Baik: {{ json_output.baik }}</li>
+            <li>Buruk: {{ json_output.buruk }}</li>
+            <li>Sedang: {{ json_output.sedang }}</li>
+        </ul>
+    {% endif %}
+    
+    {% if video_output %}
+        <h2>Video Hasil Klasifikasi:</h2>
+        <video controls>
+            <source src="\{{ video_output }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    {% endif %}
+</body>
+</html>
